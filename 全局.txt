@@ -1,0 +1,43 @@
+
+Sub LoadDataGridView()  
+	Dim  connectionString As String = "Data Source=172.20.1.25;Connection Timeout=60000; Initial Catalog=MFG_ReportSystem_PRD;User ID=MFG_ReportSystem;Password=U2!5J9^45H35|N@YRCS2;pooling=true" 
+	Dim query As String = "SELECT * FROM TestVB" 	 
+	' 创建一个新的SqlConnection对象 
+	Using connection As New System.Data.SqlClient.SqlConnection(connectionString) 
+		Try 
+			' 打开连接 
+			connection.Open() 
+ 
+			' 创建一个SqlCommand对象 
+			Using command As New System.Data.SqlClient.SqlCommand(query, connection) 
+ 
+				' 创建一个SqlDataAdapter对象来填充DataSet 
+				Using adapter As New System.Data.SqlClient.SqlDataAdapter(command) 
+					Dim dataTable As New Data.DataTable() 
+					adapter.Fill(dataTable) ' 填充DataTable 
+ 
+					' 将DataTable设置为DataGridView的数据源 
+					C("Grid1").DataSource = Nothing  
+					C("Grid1").DataSource = dataTable 
+					C("Grid1").AllowUserToAddRows = False 
+					C("Grid1").Columns(0).Visible = False 
+ 
+ 
+				End Using ' SqlDataAdapter 
+ 
+			End Using ' SqlCommand 
+ 
+		Catch ex As Exception 
+			' 异常处理 
+			msgbox("Error: " & ex.Message) 
+		End Try 
+	End Using ' SqlConnection 
+End Sub  
+
+''移除列
+Sub RemoveCol(dt As DataTable, col As String)
+	If dt.Columns.Contains(col) Then 
+		dt.Columns.Remove(col) 
+	End If 
+	 
+End Sub  
